@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="shortcut icon " type="images/x-icon" th:href="@{/images/favicon.ico}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/product.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}">
+    <script th:src="@{/js/bootstrap/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+</head>
+<body>
+<script th:src="@{/header/header.js}" id="header" th:url="@{/header/}"></script>
+<div class="container">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <span>注册信息登记</span>
+            </div>
+        </div>
+        <div class="panel-body">
+            <form>
+                <div class="form-group">
+                    <span id="text_account" class="form-group-addon">登录账号</span>
+                    <span id="checkAccount1" style="display:none;color:red;" class="form-group-addon">登录账号已存在!</span>
+                    <span id="checkAccount2" style="display:none;color:green;" class="form-group-addon">登录账号合法!</span>
+                    <input maxlength="10" type="text" class="form-control" id="account" name="user_account" autofocus="autofocus" placeholder="登录账号（最低6个字符）">
+                </div>
+                <div class="form-group">
+                    <span class="form-group-addon">昵称</span>
+                    <input maxlength="10" type="text" class="form-control" name="user_username" placeholder="昵称（最低4个字符）">
+                </div>
+                <div class="form-group">
+                    <span class="form-group-addon">密码</span>
+                    <input maxlength="20" type="password" class="form-control" name="user_password" placeholder="密码（最低8个字符）">
+                </div>
+                <div class="form-group">
+                    <span class="form-group-addon">确认密码</span>
+                    <input maxlength="20" type="password" class="form-control" name="user_password1" placeholder="确认密码（最低8个字符）">
+                </div>
+                <div class="form-group">
+                    <span class="form-group-addon">电子邮箱</span>
+                    <input type="email" class="form-control" name="user_email_address" placeholder="电子邮箱">
+                </div>
+                <div class="form-group">
+                    <span>头像（大小在1M以内）</span>
+                    <input type="file" class="form-control" id="headImg">
+                </div>
+
+                <div class="text-center" style="margin-top: 20px">
+                    <a href="#" id="register" class="btn-lg btn-success">提交注册</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+<script th:src="@{/footer/footer.js}" id="footer" th:url="@{/footer/}"></script>
+<script>
+    <!--检查数据库是否有相同的登录账号-->
+    $(function () {
+        $('#account').blur(function () {
+            if($("input[name='user_account']").val().length < 6){
+                return;
+            }
+            var checkAccountUrl = "./checkAccount?account=";
+            $.ajax({
+                url:checkAccountUrl+$("input[name='user_account']").val(),
+                type: 'GET',
+                contentType: false,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    if (data.success) {
+                        $("#text_account").css("display","none");
+                        $("#checkAccount1").css("display","none");
+                        $("#checkAccount2").css("display","block");
+                    } else {
+                        $("#text_account").css("display","none");
+                        $("#checkAccount1").css("display","block");
+                    }
+                }
+            });
+        });
+    });
+
+
+    <!--注册表单提交-->
+    $(function () {
+        var registerUrl = "./register";
+        $('#register').click(function () {
+            if($("input[name='user_password']").val()!=$("input[name='user_password1']").val()){
+                alert("两次密码不一致！");
+                return;
+            }
+            if ($("input[name='user_account']").val().length < 6 || $("input[name='user_account']").val().length > 10) {
+                alert("登录账号长度不合法！");
+                return;
+            }
+            if ($("input[name='user_username']").val().length < 4 || $("input[name='user_username']").val().length > 10) {
+                alert("昵称长度不合法！");
+                return;
+            }
+            if ($("input[name='user_password']").val().length < 8 || $("input[name='user_password']").val().length > 20) {
+                alert("密码长度不合法！");
+                return;
+            }
+            <!--用户信息-->
+            var registerInfo = {};
+            registerInfo.user_account = $("input[name='user_account']").val();
+            registerInfo.user_username = $("input[name='user_username']").val();
+            registerInfo.user_password = $("input[name='user_password']").val();
+            registerInfo.user_email_address = $("input[name='user_email_address']").val();
+            var formData = new FormData();
+            formData.append('registerInfo', JSON.stringify(registerInfo));
+            <!--用户头像-->
+            var thumbnail = $('#headImg')[0].files[0];
+            if(thumbnail==null){
+                alert("头像不能为空！");
+                return;
+            }
+            formData.append('thumbnail', thumbnail);
+            $.ajax({
+                url:registerUrl,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                cache: false,
+                success: function (data) {
+                    if (data.success) {
+                        alert("注册成功！");
+                        window.location="./login";
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
