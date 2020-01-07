@@ -1,10 +1,12 @@
 package cn.lixingyu.Apache.entity;
 
+import java.io.Serializable;
+
 /**
  * @author Rlxy93
  * @time 2020/01/05 17:06
  */
-public class UserInfo {
+public class UserInfo implements Serializable {
     //用户的唯一id，并作为用户头像的名称
     private String user_uuid;
     //登录账号
@@ -15,6 +17,12 @@ public class UserInfo {
     //激活状态，0：未激活，1：已激活
     private Integer user_status;
     private String user_email_address;
+
+    public UserInfo(String user_uuid, String user_account, String user_email_address) {
+        this.user_uuid = user_uuid;
+        this.user_account = user_account;
+        this.user_email_address = user_email_address;
+    }
 
     public UserInfo() {
     }

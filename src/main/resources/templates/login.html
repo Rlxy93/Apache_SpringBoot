@@ -6,13 +6,13 @@
     <link rel="shortcut icon " type="images/x-icon" th:href="@{/images/favicon.ico}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/Apache/resources/css/product.css">
+    <link rel="stylesheet" th:href="@{/css/product.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}">
     <script th:src="@{/js/bootstrap/jquery-3.3.1.min.js}"></script>
     <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
 </head>
 <body>
-<script src="/Apache/resources/header/header.js" id="header" url="/Apache/resources/header/"></script>
+<script th:src="@{/header/header.js}" id="header" th:url="@{/header/}"></script>
 <div class="container" id="form">
     <div class="panel panel-info">
         <div class="panel-heading">
@@ -42,6 +42,6 @@
     </div>
 
 </div>
-<script th:src="@{/footer/footer.js}" id="footer" url="/footer/"></script>
+<script th:src="@{/footer/footer.js}" id="footer" th:url="@{/footer/}"></script>
 </body>
 </html>

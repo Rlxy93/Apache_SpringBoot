@@ -4,6 +4,7 @@ import cn.lixingyu.Apache.entity.UserInfo;
 import cn.lixingyu.Apache.exception.UserException;
 import cn.lixingyu.Apache.service.UserService;
 import net.sf.json.JSONObject;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     //注册用户
     @PostMapping("/register")
@@ -73,6 +77,9 @@ public class UserController {
         try {
             userService.register(userInfo, userHeadImage);
             modelMap.put("success", true);
+            //注册成功，开始向RabbitMQ发送消息
+            rabbitTemplate.convertAndSend("email.direct","sendEmail",
+                    new UserInfo(userInfo.getUser_uuid(),userInfo.getUser_account(),userInfo.getUser_email_address()));
         } catch (UserException e) {
             modelMap.put("success", false);
             modelMap.put("message", e.getMessage());
@@ -93,6 +100,18 @@ public class UserController {
             modelMap.put("message", e.getMessage());
         }
         return modelMap;
+    }
+
+    //激活新用户
+    @GetMapping("/activeUser")
+    @ResponseBody
+    public String activeUser(@RequestParam String uuid){
+        try {
+            userService.activeUser(uuid);
+            return "<script>alert('激活成功！');window.location='./login';</script>";
+        } catch (UserException e) {
+            return "<script>alert('激活失败！"+e.getMessage()+"');</script>";
+        }
     }
 
 }

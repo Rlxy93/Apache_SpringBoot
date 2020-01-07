@@ -1,5 +1,7 @@
 package cn.lixingyu.Apache.config;
 
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
  */
 @Configuration
 public class SpringConfig {
+
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver getCommonsMultipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
@@ -18,4 +21,9 @@ public class SpringConfig {
         return multipartResolver;
     }
 
+    //为RabbitMQ序列化
+    @Bean
+    public MessageConverter messageConverter(){
+        return new Jackson2JsonMessageConverter();
+    }
 }

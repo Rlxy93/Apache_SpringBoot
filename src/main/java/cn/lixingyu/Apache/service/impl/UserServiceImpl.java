@@ -40,6 +40,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void activeUser(String uuid) throws UserException {
+        if (uuid.equals(null)){
+            throw new UserException("用户激活失败！");
+        }
+        userRepository.activeUser(uuid);
+    }
+
     //把头像文件保存到本地
     public void addHeadImg(UserInfo UserInfo, CommonsMultipartFile userInfoHeadImg) {
         String dest = PathUtil.getUserImgPath(UserInfo.getUser_uuid());
