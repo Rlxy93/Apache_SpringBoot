@@ -26,23 +26,23 @@
                     <span id="text_account" class="form-group-addon">登录账号</span>
                     <span id="checkAccount1" style="display:none;color:red;" class="form-group-addon">登录账号已存在!</span>
                     <span id="checkAccount2" style="display:none;color:green;" class="form-group-addon">登录账号合法!</span>
-                    <input maxlength="10" type="text" class="form-control" id="account" name="user_account" autofocus="autofocus" placeholder="登录账号（最低6个字符）">
+                    <input maxlength="10" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" type="text" class="form-control" id="account" name="userAccount" autofocus="autofocus" placeholder="登录账号（最低6个字符）">
                 </div>
                 <div class="form-group">
                     <span class="form-group-addon">昵称</span>
-                    <input maxlength="10" type="text" class="form-control" name="user_username" placeholder="昵称（最低4个字符）">
+                    <input maxlength="10" type="text" class="form-control" name="userUsername" placeholder="昵称（最低4个字符）">
                 </div>
                 <div class="form-group">
                     <span class="form-group-addon">密码</span>
-                    <input maxlength="20" type="password" class="form-control" name="user_password" placeholder="密码（最低8个字符）">
+                    <input maxlength="20" type="password" class="form-control" name="userPassword" placeholder="密码（最低8个字符）">
                 </div>
                 <div class="form-group">
                     <span class="form-group-addon">确认密码</span>
-                    <input maxlength="20" type="password" class="form-control" name="user_password1" placeholder="确认密码（最低8个字符）">
+                    <input maxlength="20" type="password" class="form-control" name="userPassword1" placeholder="确认密码（最低8个字符）">
                 </div>
                 <div class="form-group">
                     <span class="form-group-addon">电子邮箱</span>
-                    <input type="email" class="form-control" name="user_email_address" placeholder="电子邮箱">
+                    <input type="email" class="form-control" name="userEmailAddress" placeholder="电子邮箱">
                 </div>
                 <div class="form-group">
                     <span>头像（大小在1M以内）</span>
@@ -65,12 +65,12 @@
     <!--检查数据库是否有相同的登录账号-->
     $(function () {
         $('#account').blur(function () {
-            if($("input[name='user_account']").val().length < 6){
+            if($("input[name='userAccount']").val().length < 6){
                 return;
             }
             var checkAccountUrl = "./checkAccount?account=";
             $.ajax({
-                url:checkAccountUrl+$("input[name='user_account']").val(),
+                url:checkAccountUrl+$("input[name='userAccount']").val(),
                 type: 'GET',
                 contentType: false,
                 processData: false,
@@ -94,28 +94,28 @@
     $(function () {
         var registerUrl = "./register";
         $('#register').click(function () {
-            if($("input[name='user_password']").val()!=$("input[name='user_password1']").val()){
+            if($("input[name='userPassword']").val()!=$("input[name='userPassword1']").val()){
                 alert("两次密码不一致！");
                 return;
             }
-            if ($("input[name='user_account']").val().length < 6 || $("input[name='user_account']").val().length > 10) {
+            if ($("input[name='userAccount']").val().length < 6 || $("input[name='userAccount']").val().length > 10) {
                 alert("登录账号长度不合法！");
                 return;
             }
-            if ($("input[name='user_username']").val().length < 4 || $("input[name='user_username']").val().length > 10) {
+            if ($("input[name='userUsername']").val().length < 4 || $("input[name='userUsername']").val().length > 10) {
                 alert("昵称长度不合法！");
                 return;
             }
-            if ($("input[name='user_password']").val().length < 8 || $("input[name='user_password']").val().length > 20) {
+            if ($("input[name='userPassword']").val().length < 8 || $("input[name='userPassword']").val().length > 20) {
                 alert("密码长度不合法！");
                 return;
             }
             <!--用户信息-->
             var registerInfo = {};
-            registerInfo.user_account = $("input[name='user_account']").val();
-            registerInfo.user_username = $("input[name='user_username']").val();
-            registerInfo.user_password = $("input[name='user_password']").val();
-            registerInfo.user_email_address = $("input[name='user_email_address']").val();
+            registerInfo.userAccount = $("input[name='userAccount']").val();
+            registerInfo.userUsername = $("input[name='userUsername']").val();
+            registerInfo.userPassword = $("input[name='userPassword']").val();
+            registerInfo.userEmailAddress = $("input[name='userEmailAddress']").val();
             var formData = new FormData();
             formData.append('registerInfo', JSON.stringify(registerInfo));
             <!--用户头像-->

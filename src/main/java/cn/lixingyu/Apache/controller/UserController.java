@@ -4,10 +4,18 @@ import cn.lixingyu.Apache.entity.UserInfo;
 import cn.lixingyu.Apache.exception.UserException;
 import cn.lixingyu.Apache.service.UserService;
 import net.sf.json.JSONObject;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.subject.Subject;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -55,31 +63,34 @@ public class UserController {
         String registerInfo = request.getParameter("registerInfo");
         UserInfo userInfo = (UserInfo) JSONObject.toBean(JSONObject.fromObject(registerInfo), UserInfo.class);
         //判断注册信息是否合法
-        if (userInfo.getUser_account().length() < 6 || userInfo.getUser_account().length() > 10) {
+        if (userInfo.getUserAccount().length() < 6 || userInfo.getUserAccount().length() > 10) {
             modelMap.put("success", false);
             modelMap.put("message", "登录账号长度不合法！");
             return modelMap;
         }
-        if (userInfo.getUser_username().length() < 4 || userInfo.getUser_username().length() > 10) {
+        if (userInfo.getUserUsername().length() < 4 || userInfo.getUserUsername().length() > 10) {
             modelMap.put("success", false);
             modelMap.put("message", "昵称长度不合法！");
             return modelMap;
         }
-        if (userInfo.getUser_password().length() < 8 || userInfo.getUser_password().length() > 20) {
+        if (userInfo.getUserPassword().length() < 8 || userInfo.getUserPassword().length() > 20) {
             modelMap.put("success", false);
             modelMap.put("message", "密码长度不合法！");
             return modelMap;
         }
         //默认未激活
-        userInfo.setUser_status(0);
+        userInfo.setUserStatus(0);
         //设置uuid
-        userInfo.setUser_uuid(UUID.randomUUID().toString());
+        userInfo.setUserUuid(UUID.randomUUID().toString());
+        userInfo.setUserAccount(userInfo.getUserAccount().toUpperCase());
+        String md5 = new SimpleHash("md5", userInfo.getUserPassword(), userInfo.getUserAccount(), 5).toHex();
+        userInfo.setUserPassword(md5);
         try {
             userService.register(userInfo, userHeadImage);
             modelMap.put("success", true);
             //注册成功，开始向RabbitMQ发送消息
             rabbitTemplate.convertAndSend("email.direct","sendEmail",
-                    new UserInfo(userInfo.getUser_uuid(),userInfo.getUser_account(),userInfo.getUser_email_address()));
+                    new UserInfo(userInfo.getUserUuid(),userInfo.getUserAccount(),userInfo.getUserEmailAddress()));
         } catch (UserException e) {
             modelMap.put("success", false);
             modelMap.put("message", e.getMessage());
@@ -112,6 +123,28 @@ public class UserController {
         } catch (UserException e) {
             return "<script>alert('激活失败！"+e.getMessage()+"');</script>";
         }
+    }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public Map<String, Object> login(HttpServletRequest request){
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        String loginInfo = request.getParameter("loginInfo");
+        UserInfo userInfo = (UserInfo) JSONObject.toBean(JSONObject.fromObject(loginInfo), UserInfo.class);
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(userInfo.getUserAccount(),userInfo.getUserPassword());
+        try{
+            token.setRememberMe(true);
+            subject.login(token);
+            modelMap.put("success",true);
+        } catch (UserException e){
+            modelMap.put("success",false);
+            modelMap.put("message",e.getMessage());
+        } catch (AuthenticationException e){
+            modelMap.put("success",false);
+            modelMap.put("message","用户名或密码错误！");
+        }
+        return modelMap;
     }
 
 }

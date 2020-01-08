@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
             throw new UserException("用户信息错误！");
         }
         userRepository.register(userInfo);
+        //设置角色，默认是customer（顾客）
+        userRepository.setRole(userInfo.getUserUuid());
         addHeadImg(userInfo,headImage);
     }
 
@@ -48,9 +50,17 @@ public class UserServiceImpl implements UserService {
         userRepository.activeUser(uuid);
     }
 
+    @Override
+    public UserInfo login(String userAccount) {
+        userAccount = userAccount.toUpperCase();
+        UserInfo userInfo = userRepository.login(userAccount);
+        return userInfo;
+
+    }
+
     //把头像文件保存到本地
     public void addHeadImg(UserInfo UserInfo, CommonsMultipartFile userInfoHeadImg) {
-        String dest = PathUtil.getUserImgPath(UserInfo.getUser_uuid());
+        String dest = PathUtil.getUserImgPath(UserInfo.getUserUuid());
         ImageUtil.generateThumbnail(userInfoHeadImg, dest);
     }
 }

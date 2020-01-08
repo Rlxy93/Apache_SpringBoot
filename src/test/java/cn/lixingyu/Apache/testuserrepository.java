@@ -1,6 +1,7 @@
 package cn.lixingyu.Apache;
 
 import cn.lixingyu.Apache.config.MailConfig;
+import cn.lixingyu.Apache.entity.RP;
 import cn.lixingyu.Apache.entity.UserInfo;
 import cn.lixingyu.Apache.repository.UserRepository;
 import org.apache.commons.logging.Log;
@@ -41,28 +42,34 @@ public class testuserrepository {
     @Test
     public void test(){
         UserInfo userInfo = new UserInfo();
-        userInfo.setUser_uuid(UUID.randomUUID().toString());
-        userInfo.setUser_username("rlxy93");
-        userInfo.setUser_password("rlxy93");
-        userInfo.setUser_email_address("admin@lixingyu.cn");
-        userInfo.setUser_status(0);
+        userInfo.setUserUuid(UUID.randomUUID().toString());
+        userInfo.setUserUsername("rlxy93");
+        userInfo.setUserPassword("rlxy93");
+        userInfo.setUserEmailAddress("admin@lixingyu.cn");
+        userInfo.setUserStatus(0);
         userRepository.register(userInfo);
     }
 
     @Test
     public void test1(){
         UserInfo userInfo = new UserInfo();
-        userInfo.setUser_uuid(UUID.randomUUID().toString());
-        userInfo.setUser_username("rlxy93");
-        userInfo.setUser_password("rlxy93");
-        userInfo.setUser_email_address("admin@lixingyu.cn");
-        userInfo.setUser_status(0);
-        rabbitTemplate.convertAndSend("email.direct","sendEmail",userInfo.getUser_email_address());
+        userInfo.setUserUuid(UUID.randomUUID().toString());
+        userInfo.setUserUsername("rlxy93");
+        userInfo.setUserPassword("rlxy93");
+        userInfo.setUserEmailAddress("admin@lixingyu.cn");
+        userInfo.setUserStatus(0);
+        rabbitTemplate.convertAndSend("email.direct","sendEmail",userInfo.getUserEmailAddress());
     }
 
     @Test
     public void test2(){
         mailConfig.sendSimpleMail("597973086@qq.com","1","1",logger);
+    }
+
+    @Test
+    public void test3(){
+        RP rp = userRepository.queryRoles("679d1de8-9207-46a9-bf0d-9afec29f48d3");
+        System.out.println(rp);
     }
 
 }

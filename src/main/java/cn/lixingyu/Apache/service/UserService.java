@@ -13,5 +13,6 @@ public interface UserService {
     void register(UserInfo userInfo, CommonsMultipartFile headImage) throws UserException;
     void checkAccount(String account) throws UserException;
     void activeUser(String uuid) throws UserException;
+    UserInfo login(String userAccount);
 
 }

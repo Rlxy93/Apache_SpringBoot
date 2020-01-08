@@ -31,9 +31,9 @@ public class RabbitMQListener {
     //监听sendEmail队列，并发送邮件
     @RabbitListener(queues = "sendEmail")
     public void listenerQUEUE(UserInfo userInfo) {
-        logger.info("开始给" + userInfo.getUser_account() + "发送邮件！");
+        logger.info("开始给" + userInfo.getUserAccount() + "发送邮件！");
         try {
-            mailConfig.sendSimpleMail(userInfo.getUser_email_address(), "lixingyu.cn激活邮件", "<a href=\"https://" + projectUrl + "/activeUser?uuid=" + userInfo.getUser_uuid() + "\">点我激活</a>", logger);
+            mailConfig.sendSimpleMail(userInfo.getUserEmailAddress(), "lixingyu.cn激活邮件", "<a href=\"https://" + projectUrl + "/activeUser?uuid=" + userInfo.getUserUuid() + "\">点我激活</a>", logger);
         } catch (Exception e) {
             logger.error("发送邮件时发生异常！", e);
         }
