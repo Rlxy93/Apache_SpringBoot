@@ -11,7 +11,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2019/10/23 08:50
  */
 @Component

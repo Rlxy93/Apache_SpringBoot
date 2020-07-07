@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.HashSet;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/08 17:26
  */
 public class CustomRealm extends AuthorizingRealm {
@@ -33,8 +33,14 @@ public class CustomRealm extends AuthorizingRealm {
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String userUuid = (String) principals.getPrimaryPrincipal();
-        RP rp = userRepository.queryRoles(userUuid);
+        String userAccount = (String) principals.getPrimaryPrincipal();
+        Integer roleId = userRepository.queryRoles(userAccount);
+        RP rp = new RP();
+        switch(roleId){
+            case 1:rp.init("customer","customer:*");break;
+            case 2:rp.init("business","business:*");break;
+            case 3:rp.init("admin","admin:*");break;
+        }
         HashSet<String> permissionsSet = new HashSet<>();
         permissionsSet.add(rp.getPermissionsName());
         HashSet<String> rolesSet = new HashSet<>();

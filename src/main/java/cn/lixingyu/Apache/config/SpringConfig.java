@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/07 13:51
  */
 @Configuration

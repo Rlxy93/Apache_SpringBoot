@@ -5,6 +5,7 @@ import cn.lixingyu.Apache.realm.CustomRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -19,7 +20,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/08 18:11
  */
 @Configuration
@@ -40,9 +41,19 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/header/**", "anon");
         filterChainDefinitionMap.put("/footer/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
+        filterChainDefinitionMap.put("/upload/item/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/index", "anon");
         filterChainDefinitionMap.put("/activeUser", "anon");
+        filterChainDefinitionMap.put("/getUserInfo", "anon");
+        filterChainDefinitionMap.put("/queryCarouselProduct", "anon");
+        filterChainDefinitionMap.put("/searchProduct", "anon");
+        filterChainDefinitionMap.put("/productInfo", "anon");
+        filterChainDefinitionMap.put("/productList", "anon");
+        filterChainDefinitionMap.put("/user/queryAllBigCategory", "anon");
+        filterChainDefinitionMap.put("/user/queryAllSmallCategory", "anon");
         filterChainDefinitionMap.put("/register", "anon");
+        filterChainDefinitionMap.put("/notifyUrl", "anon");
         filterChainDefinitionMap.put("/checkAccount", "anon");
         filterChainDefinitionMap.put("/", "anon");
         //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截 剩余的都需要认证
@@ -79,12 +90,12 @@ public class ShiroConfig {
     }
 
     //开启AOP注解支持
-//    @Bean
-//    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
-//        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-//        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-//        return authorizationAttributeSourceAdvisor;
-//    }
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
 
     //解决shiroFilterFactoryBean.setUnauthorizedUrl("/4xx.html");不生效
 //    @Bean

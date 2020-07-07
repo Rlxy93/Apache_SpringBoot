@@ -3,7 +3,7 @@ package cn.lixingyu.Apache.entity;
 import java.io.Serializable;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/05 17:06
  */
 public class UserInfo implements Serializable {
@@ -17,6 +17,13 @@ public class UserInfo implements Serializable {
     //激活状态，0：未激活，1：已激活
     private Integer userStatus;
     private String userEmailAddress;
+    private Integer shopStatus;
+
+    public UserInfo(String userUuid, String userAccount, String userEmailAddress) {
+        this.userUuid = userUuid;
+        this.userAccount = userAccount;
+        this.userEmailAddress = userEmailAddress;
+    }
 
     @Override
     public String toString() {
@@ -27,6 +34,7 @@ public class UserInfo implements Serializable {
                 ", userUsername='" + userUsername + '\'' +
                 ", userStatus=" + userStatus +
                 ", userEmailAddress='" + userEmailAddress + '\'' +
+                ", shopStatus=" + shopStatus +
                 '}';
     }
 
@@ -78,12 +86,25 @@ public class UserInfo implements Serializable {
         this.userEmailAddress = userEmailAddress;
     }
 
-    public UserInfo() {
+    public Integer getShopStatus() {
+        return shopStatus;
     }
 
-    public UserInfo(String userUuid, String userAccount, String userEmailAddress) {
+    public void setShopStatus(Integer shopStatus) {
+        this.shopStatus = shopStatus;
+    }
+
+    public UserInfo(String userUuid, String userAccount, String userPassword, String userUsername, Integer userStatus, String userEmailAddress, Integer shopStatus) {
+
         this.userUuid = userUuid;
         this.userAccount = userAccount;
+        this.userPassword = userPassword;
+        this.userUsername = userUsername;
+        this.userStatus = userStatus;
         this.userEmailAddress = userEmailAddress;
+        this.shopStatus = shopStatus;
+    }
+
+    public UserInfo() {
     }
 }

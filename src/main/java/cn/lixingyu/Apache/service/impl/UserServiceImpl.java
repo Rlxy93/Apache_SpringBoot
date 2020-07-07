@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/07 13:37
  */
 @Service
@@ -56,6 +56,15 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = userRepository.login(userAccount);
         return userInfo;
 
+    }
+
+    @Override
+    public UserInfo getUserInfo(String userAccount) throws UserException {
+        if(userAccount==null){
+            throw new UserException("用户查询失败！");
+        }
+        UserInfo userInfo = userRepository.getUserInfo(userAccount);
+        return userInfo;
     }
 
     //把头像文件保存到本地

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>添加收货地址</title>
-    <link rel="shortcut icon " type="images/x-icon" href="/Apache/resources/images/favicon.ico">
+    <link rel="shortcut icon " type="images/x-icon" th:href="@{/images/favicon.ico}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/Apache/resources/css/bootstrap/bootstrap.min.css">
-    <script src="/Apache/resources/js/bootstrap/jquery-3.3.1.min.js"></script>
-    <script src="/Apache/resources/js/bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}">
+    <script th:src="@{/js/bootstrap/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
     <style>
         .input-group {
             margin-top: 10px;
@@ -18,24 +18,24 @@
 </head>
 <body>
 
-<script src="/Apache/resources/header/header.js" id="header" url="/Apache/resources/header/"></script>
+<script th:src="@{/header/header.js}" id="header" th:url="@{/header/}"></script>
 
 <div class="container">
-    <form class="form-group">
+    <form class="form-group" action="./addAddress" method="post">
         <div class="input-group">
-            <label for="userAddressAddress" class="input-group-addon">姓名</label>
-            <input class="form-control" autofocus="autofocus" type="text" id="userAddressName" value="">
+            <label class="input-group-addon">姓名</label>
+            <input class="form-control" autofocus="autofocus" type="text" name="userName" value="">
         </div>
         <div class="input-group">
-            <label for="userAddressAddress" class="input-group-addon">电话</label>
-            <input class="form-control" oninput="value=value.replace(/[^\d]/g,'')" type="text" id="userAddressPhone" value="">
+            <label class="input-group-addon">电话</label>
+            <input class="form-control" oninput="value=value.replace(/[^\d]/g,'')" type="text" name="userPhone" value="">
         </div>
         <div class="input-group">
-            <label for="userAddressAddress" class="input-group-addon">地址</label>
-            <input class="form-control" type="text" id="userAddressAddress" value="">
+            <label class="input-group-addon">地址</label>
+            <input class="form-control" type="text" name="userAddress" value="">
         </div>
         <div class="form-group text-center">
-            <button type="button" class="btn btn-primary btn-lg btn-block" id="add">添加</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block" id="add">添加</button>
         </div>
 
     </form>
@@ -43,9 +43,6 @@
 
 </div>
 
-<script id="footer" src="/Apache/resources/footer/footer.js" url="/Apache/resources/footer/"></script>
-<script src="/Apache/resources/js/common/jquery-1.11.2.min.js"></script>
-<script src="/Apache/resources/js/common/jquery.cookie.js"></script>
-<script src="/Apache/resources/js/user/myAddress.js"></script>
+<script th:src="@{/footer/footer.js}" id="footer" th:url="@{/footer/}"></script>
 </body>
 </html>

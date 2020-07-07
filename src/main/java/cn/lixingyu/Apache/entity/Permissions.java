@@ -1,7 +1,7 @@
 package cn.lixingyu.Apache.entity;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/08 16:28
  */
 public class Permissions {

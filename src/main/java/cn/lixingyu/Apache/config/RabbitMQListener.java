@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/07 17:06
  */
 @Component
@@ -33,7 +33,7 @@ public class RabbitMQListener {
     public void listenerQUEUE(UserInfo userInfo) {
         logger.info("开始给" + userInfo.getUserAccount() + "发送邮件！");
         try {
-            mailConfig.sendSimpleMail(userInfo.getUserEmailAddress(), "lixingyu.cn激活邮件", "<a href=\"https://" + projectUrl + "/activeUser?uuid=" + userInfo.getUserUuid() + "\">点我激活</a>", logger);
+            mailConfig.sendSimpleMail(userInfo.getUserEmailAddress(), "lixingyu.cn激活邮件", "<a href=\"http://" + projectUrl + "/Apache/activeUser?uuid=" + userInfo.getUserUuid() + "\">点我激活</a>", logger);
         } catch (Exception e) {
             logger.error("发送邮件时发生异常！", e);
         }

@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/05 17:37
  */
 @Controller
@@ -78,8 +78,6 @@ public class UserController {
             modelMap.put("message", "密码长度不合法！");
             return modelMap;
         }
-        //默认未激活
-        userInfo.setUserStatus(0);
         //设置uuid
         userInfo.setUserUuid(UUID.randomUUID().toString());
         userInfo.setUserAccount(userInfo.getUserAccount().toUpperCase());
@@ -89,8 +87,8 @@ public class UserController {
             userService.register(userInfo, userHeadImage);
             modelMap.put("success", true);
             //注册成功，开始向RabbitMQ发送消息
-            rabbitTemplate.convertAndSend("email.direct","sendEmail",
-                    new UserInfo(userInfo.getUserUuid(),userInfo.getUserAccount(),userInfo.getUserEmailAddress()));
+            rabbitTemplate.convertAndSend("email.direct", "sendEmail",
+                    new UserInfo(userInfo.getUserUuid(), userInfo.getUserAccount(), userInfo.getUserEmailAddress()));
         } catch (UserException e) {
             modelMap.put("success", false);
             modelMap.put("message", e.getMessage());
@@ -101,7 +99,7 @@ public class UserController {
     //检查账号是否存在
     @GetMapping("/checkAccount")
     @ResponseBody
-    public Map<String,Object> checkAccount(@RequestParam("account") String account){
+    public Map<String, Object> checkAccount(@RequestParam("account") String account) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         try {
             userService.checkAccount(account);
@@ -116,33 +114,75 @@ public class UserController {
     //激活新用户
     @GetMapping("/activeUser")
     @ResponseBody
-    public String activeUser(@RequestParam String uuid){
+    public String activeUser(@RequestParam String uuid) {
         try {
             userService.activeUser(uuid);
             return "<script>alert('激活成功！');window.location='./login';</script>";
         } catch (UserException e) {
-            return "<script>alert('激活失败！"+e.getMessage()+"');</script>";
+            return "<script>alert('激活失败！" + e.getMessage() + "');</script>";
         }
     }
 
+    //登录
     @PostMapping("/login")
     @ResponseBody
-    public Map<String, Object> login(HttpServletRequest request){
+    public Map<String, Object> postLogin(HttpServletRequest request) {
         Map<String, Object> modelMap = new HashMap<String, Object>();
         String loginInfo = request.getParameter("loginInfo");
         UserInfo userInfo = (UserInfo) JSONObject.toBean(JSONObject.fromObject(loginInfo), UserInfo.class);
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(userInfo.getUserAccount(),userInfo.getUserPassword());
-        try{
+        UsernamePasswordToken token = new UsernamePasswordToken(userInfo.getUserAccount(), userInfo.getUserPassword());
+        try {
             token.setRememberMe(true);
             subject.login(token);
+            modelMap.put("success", true);
+        } catch (UserException e) {
+            modelMap.put("success", false);
+            modelMap.put("message", e.getMessage());
+        } catch (AuthenticationException e) {
+            modelMap.put("success", false);
+            modelMap.put("message", "用户名或密码错误！");
+        }
+        return modelMap;
+    }
+
+    //进入登录页面时，判断是否已经登录
+    @GetMapping("/login")
+    public String getLogin() {
+        if (SecurityUtils.getSubject().isAuthenticated()) {
+            return "redirect:/index";
+        }
+        return "login";
+    }
+
+    //注销登录
+    @GetMapping("/logout")
+    @ResponseBody
+    public Map<String, Object> logout() {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        if (SecurityUtils.getSubject().isAuthenticated()) {
+            SecurityUtils.getSubject().logout();
+            modelMap.put("success", true);
+            return modelMap;
+        }
+        modelMap.put("success", false);
+        return modelMap;
+    }
+
+    //获取登录用户信息
+    @PostMapping("/getUserInfo")
+    @ResponseBody
+    public Map<String, Object> getUserInfo() {
+        Map<String, Object> modelMap = new HashMap<String, Object>();
+        Subject subject = SecurityUtils.getSubject();
+        String userAccount = (String) subject.getPrincipal();
+        try{
+            UserInfo userInfo = userService.getUserInfo(userAccount);
             modelMap.put("success",true);
-        } catch (UserException e){
+            modelMap.put("userInfo", userInfo);
+        }catch (UserException e){
             modelMap.put("success",false);
             modelMap.put("message",e.getMessage());
-        } catch (AuthenticationException e){
-            modelMap.put("success",false);
-            modelMap.put("message","用户名或密码错误！");
         }
         return modelMap;
     }

@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<script src="/Apache/resources/header/header.js" id="header" url="/Apache/resources/header/"></script>
+<script th:src="@{/header/header.js}" id="header" th:url="@{/header/}"></script>
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-lg-10 col-md-10 col-xs-8" style="margin-bottom: 20px">
                     <h3 id="username"></h3>
-                    <span class="label" style="color:black;" id="userEmail"></span><br>
+                    <span class="label" style="color:black;" id="userEmailAddress"></span><br>
                 </div>
             </div>
             <div class="row" id="info">
@@ -63,13 +63,22 @@
                 <div class="container" style="margin-bottom: 10px" id="ManagerShop">
 
                     <a id="shop" href="./user/apply">
-                        <button class="btn btn-warning" id="apply">申请店铺</button>
+                        <button class="btn btn-warning">申请店铺</button>
+                    </a>
+                    <a id="managerShopInfo" style="display:none;" href="./user/managerShopInfo">
+                        <button class="btn btn-info">店铺信息</button>
+                    </a>
+                    <a id="managerProduct" style="display:none;" href="./user/managerProduct">
+                        <button class="btn btn-warning">商品管理</button>
+                    </a>
+                    <a id="managerOrder" style="display:none;" href="./user/managerOrder">
+                        <button class="btn btn-success">订单管理</button>
                     </a>
 
                 </div>
 
 
-                <div class="alert alert-info" id="address">
+                <div class="alert alert-info">
                     收货地址
                 </div>
                 <table id="addressInfo" class="table table-bordered table-hover">
@@ -148,6 +157,8 @@
 </div>
 <!--修改密码结束-->
 <!--       底部信息                    -->
-<script th:src="@{/footer/footer.js}" id="footer" url="/footer/"></script>
+<script th:src="@{/footer/footer.js}" id="footer" th:url="@{/footer/}"></script>
+<script th:src="@{/js/user.js}"></script>
+<script th:src="@{/js/common/jquery.cookie.js}"></script>
 </body>
 </html>

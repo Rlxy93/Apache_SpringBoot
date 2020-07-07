@@ -17,6 +17,13 @@ $(document).ready(function(){
                 header.fadeIn(1000);
             })
 
+            if($.cookie("userUsername")){
+                $('#userName').text('欢迎你，' + $.cookie('userUsername'));
+                $('#userName').attr("href", "/Apache/user");
+                $('#logout').css("display", "block");
+                $('#register').css("display", "none");
+            }
+
 
         }
     });

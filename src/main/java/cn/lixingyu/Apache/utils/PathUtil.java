@@ -12,7 +12,10 @@ public class PathUtil {
         String basePath = "";
         if(os.toLowerCase().startsWith("win")){
             basePath = "D:/Images/";
-        }else{
+        }else if(os.toLowerCase().startsWith("mac")){
+            basePath = "/Volumes/软件/Images/";
+        }
+        else{
             basePath = "/home/Images/";
         }
         basePath = basePath.replace("/",seperator);
@@ -20,17 +23,17 @@ public class PathUtil {
     }
 
     public static String getUserImgPath(String userId){
-        String imagePath = "/Apache/upload/item/user/head/" + userId + "/";
+        String imagePath = "/Apache/upload/item/user/head/" + userId;
         return imagePath;
     }
 
     public static String getShopImgPath(String userId){
-        String imagePath = "/Apache/upload/item/user/shop/" + userId + "/";
+        String imagePath = "/Apache/upload/item/user/shop/" + userId;
         return imagePath;
     }
 
     public static String getProductImgPath(String userId){
-        String imagePath = "/Apache/upload/item/user/product/" + userId + "/";
+        String imagePath = "/Apache/upload/item/user/product/" + userId;
         return imagePath;
     }
 }

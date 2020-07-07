@@ -1,7 +1,6 @@
 package cn.lixingyu.Apache;
 
 import cn.lixingyu.Apache.config.MailConfig;
-import cn.lixingyu.Apache.entity.RP;
 import cn.lixingyu.Apache.entity.UserInfo;
 import cn.lixingyu.Apache.repository.UserRepository;
 import org.apache.commons.logging.Log;
@@ -18,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.UUID;
 
 /**
- * @author Rlxy93
+ * @author Lxxxxxxy
  * @time 2020/01/05 17:09
  */
 @SpringBootTest
@@ -43,8 +42,8 @@ public class testuserrepository {
     public void test(){
         UserInfo userInfo = new UserInfo();
         userInfo.setUserUuid(UUID.randomUUID().toString());
-        userInfo.setUserUsername("rlxy93");
-        userInfo.setUserPassword("rlxy93");
+        userInfo.setUserUsername("Lxxxxxxy");
+        userInfo.setUserPassword("Lxxxxxxy");
         userInfo.setUserEmailAddress("admin@lixingyu.cn");
         userInfo.setUserStatus(0);
         userRepository.register(userInfo);
@@ -54,8 +53,8 @@ public class testuserrepository {
     public void test1(){
         UserInfo userInfo = new UserInfo();
         userInfo.setUserUuid(UUID.randomUUID().toString());
-        userInfo.setUserUsername("rlxy93");
-        userInfo.setUserPassword("rlxy93");
+        userInfo.setUserUsername("Lxxxxxxy");
+        userInfo.setUserPassword("Lxxxxxxy");
         userInfo.setUserEmailAddress("admin@lixingyu.cn");
         userInfo.setUserStatus(0);
         rabbitTemplate.convertAndSend("email.direct","sendEmail",userInfo.getUserEmailAddress());
@@ -68,8 +67,8 @@ public class testuserrepository {
 
     @Test
     public void test3(){
-        RP rp = userRepository.queryRoles("679d1de8-9207-46a9-bf0d-9afec29f48d3");
-        System.out.println(rp);
+//        RP rp = userRepository.queryRoles("679d1de8-9207-46a9-bf0d-9afec29f48d3");
+//        System.out.println(rp);
     }
 
 }
